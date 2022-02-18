@@ -1,0 +1,13 @@
+FROM postgres:9.6
+ENV POSTGRES_HOST_AUTH_METHOD trust
+ENV POSTGIS_MAJOR 2.5
+
+RUN apt-get update \
+      && apt-cache showpkg postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR \
+      && apt-get install -y --no-install-recommends \
+           postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR \
+           postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR-scripts \
+           postgresql-plpython-$PG_MAJOR \
+      && rm -rf /var/lib/apt/lists/*
+COPY docker/postgres/* /docker-entrypoint-initdb.d/
+COPY docker/postgres/* /opt/refresh/
