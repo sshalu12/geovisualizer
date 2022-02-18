@@ -1,4 +1,4 @@
-run-db:
+run:
 	@docker-compose up
 
 refresh:
