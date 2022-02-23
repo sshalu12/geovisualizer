@@ -4,21 +4,23 @@ import psycopg2
 hostname = 'postgres'
 database='geovisualizer'
 username='postgres'
-pwd=''
+
 port_id=5432
 conn= psycopg2.connect(
         host=hostname,
         dbname=database,
         user=username,
-        password=pwd,
         port=port_id
     )
+
 cur=conn.cursor()
 cur.execute('SELECT * from poi ')
 query=cur.fetchall()
-k=[]
+
+poi=[]
+
 for i in range(0,len(query)):   
-    m={
+    feature={
         "type":"Feature",
          "properties": {
                     "id":query[i][0],
@@ -39,10 +41,16 @@ for i in range(0,len(query)):
                 }
 
     }
-    k.append(m)
+    poi.append(feature)
+
 geo=json.dumps({
     "type": "FeatureCollection",
-         "features": k})
-with open('./usr/script/poi.geojson', 'w') as f:
-    f.write(geo)  
+         "features": poi})
+
+try:
+    with open('./usr/script/poi.geojson', 'w') as f:
+        f.write(geo)  
+except EOFError as e:
+    print(e)
+
 conn.close()
