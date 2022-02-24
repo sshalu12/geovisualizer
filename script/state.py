@@ -9,33 +9,26 @@ port_id = 5432
 conn = psycopg2.connect(host=hostname, dbname=database, user=username, port=port_id)
 cur = conn.cursor()
 
-cur.execute("SELECT * from states")
+cur.execute("SELECT *,ST_AsGeoJSON(boundary,4326)::JSONB from states")
 query = cur.fetchall()
+conn.close()
 
-cur.execute("SELECT ST_AsGeoJSON(boundary,4326)::JSONB from states ")
-multiploygon = cur.fetchall()
-
-geometry = []
 state = []
 
-for i in range(0, len(query)):
-    geometry.append(multiploygon[i][0])
-
-
-for i in range(0, len(query)):
+for i in query:
     feature = {
         "type": "Feature",
-        "properties": {"id": query[i][0], "state": query[i][1], "country": query[i][2]},
-        "geometry": geometry[i],
+        "properties": {"id": i[0], "state": i[1], "country": i[2]},
+        "geometry": i[4],
     }
     state.append(feature)
 
 geo = json.dumps({"type": "FeatureCollection", "features": state})
 
 try:
-    with open("./usr/script/state.geojson", "w") as f:
+    with open("./app/state.geojson", "w") as f:
         f.write(geo)
-except EOFError as e:
+except Exception as e:
     print(e)
 
-conn.close()
+
