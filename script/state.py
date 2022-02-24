@@ -19,7 +19,7 @@ for i in query:
     feature = {
         "type": "Feature",
         "properties": {"id": i[0], "state": i[1], "country": i[2]},
-        "geometry": i[4],
+        "geometry": i[3],
     }
     state.append(feature)
 
