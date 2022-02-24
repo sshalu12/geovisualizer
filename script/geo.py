@@ -20,37 +20,33 @@ conn.close()
 poi=[]
 
 for data in query:   
-    feature={
+    feature = {
         "type":"Feature",
-         "properties": {
-                    "id":data[0],
-                    "business_name": data[1],
-                    "address": data[2],
-                    "city": data[3],
-                    "state": data[4],
-                    "zip": data[5],
-                    "country": data[8],
-                    "category_name": data[9],
-                    "category_id": data[10]
-                },
-       "geometry":{
-                    "type":"Point",
-                    "coordinates":[
-                        data[7],data[6]
-                    ]
-                }
-
+        "properties": {
+            "id":data[0],
+            "business_name": data[1],
+            "address": data[2],
+            "city": data[3],
+            "state": data[4],
+            "zip": data[5],
+            "country": data[8],
+            "category_name": data[9],
+            "category_id": data[10]
+        },
+        "geometry":{
+            "type":"Point",
+            "coordinates":[data[7],data[6]]
+        }
     }
     poi.append(feature)
 
-geo=json.dumps({
+geo = json.dumps({
     "type": "FeatureCollection",
-         "features": poi})
+    "features": poi
+})
 
 try:
     with open('./app/poi.geojson', 'w') as f:
         f.write(geo)  
 except Exception as e:
     print(e)
-
-
