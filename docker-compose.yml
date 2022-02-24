@@ -9,8 +9,8 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ./script:/usr/script
-    command: [ "./usr/script/wait-for-postgres.sh","postgres","python", "./usr/script/geo.py"]
+      - ./script:/app
+    command: [ "./app/wait-for-postgres.sh","postgres","python", "./app/geo.py"]
 
   postgres:
     build:

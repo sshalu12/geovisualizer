@@ -1,4 +1,3 @@
-import re
 import json
 import psycopg2
 hostname = 'postgres'
@@ -16,27 +15,28 @@ conn= psycopg2.connect(
 cur=conn.cursor()
 cur.execute('SELECT * from poi ')
 query=cur.fetchall()
+conn.close()
 
 poi=[]
 
-for i in range(0,len(query)):   
+for data in query:   
     feature={
         "type":"Feature",
          "properties": {
-                    "id":query[i][0],
-                    "business_name":query[i][1],
-                    "address":query[i][2],
-                    "city":query[i][3],
-                    "state":query[i][4],
-                    "zip":query[i][5],
-                    "country":query[i][8],
-                    "category_name":query[i][9],
-                    "category_id":query[i][10]
+                    "id":data[0],
+                    "business_name": data[1],
+                    "address": data[2],
+                    "city": data[3],
+                    "state": data[4],
+                    "zip": data[5],
+                    "country": data[8],
+                    "category_name": data[9],
+                    "category_id": data[10]
                 },
        "geometry":{
                     "type":"Point",
                     "coordinates":[
-                        query[i][7],query[i][6]
+                        data[7],data[6]
                     ]
                 }
 
@@ -48,9 +48,9 @@ geo=json.dumps({
          "features": poi})
 
 try:
-    with open('./usr/script/poi.geojson', 'w') as f:
+    with open('./app/poi.geojson', 'w') as f:
         f.write(geo)  
 except EOFError as e:
     print(e)
 
-conn.close()
+
