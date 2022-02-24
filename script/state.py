@@ -9,7 +9,7 @@ port_id = 5432
 conn = psycopg2.connect(host=hostname, dbname=database, user=username, port=port_id)
 cur = conn.cursor()
 
-cur.execute("SELECT *,ST_AsGeoJSON(boundary,4326)::JSONB from states")
+cur.execute("SELECT id,state,country,ST_AsGeoJSON(boundary,4326)::JSONB from states")
 query = cur.fetchall()
 conn.close()
 
