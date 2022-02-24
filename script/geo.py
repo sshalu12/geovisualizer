@@ -50,7 +50,7 @@ geo=json.dumps({
 try:
     with open('./app/poi.geojson', 'w') as f:
         f.write(geo)  
-except EOFError as e:
+except Exception as e:
     print(e)
 
 
