@@ -10,7 +10,7 @@ services:
       - postgres
     volumes:
       - ./script:/app
-    command: [ "./app/wait-for-postgres.sh","postgres","python", "./app/state.py"]
+    command: [ "./app/wait-for-postgres.sh","postgres","python", "./app/geo.py"]
 
   postgres:
     build:
