@@ -10,20 +10,20 @@ conn = psycopg2.connect(host=hostname, dbname=database, user=username, port=port
 cur = conn.cursor()
 
 cur.execute("SELECT id,state,country,ST_AsGeoJSON(boundary,4326)::JSONB from states")
-query = cur.fetchall()
+states_data = cur.fetchall()
 conn.close()
 
-state = []
+states = []
 
-for i in query:
+for row in states_data:
     feature = {
         "type": "Feature",
-        "properties": {"id": i[0], "state": i[1], "country": i[2]},
-        "geometry": i[3],
+        "properties": {"id": row[0], "state": row[1], "country": row[2]},
+        "geometry": row[3],
     }
-    state.append(feature)
+    states.append(feature)
 
-geo = json.dumps({"type": "FeatureCollection", "features": state})
+geo = json.dumps({"type": "FeatureCollection", "features": states})
 
 try:
     with open("./app/state.geojson", "w") as f:
