@@ -1,5 +1,6 @@
 import json
 import psycopg2
+import togeojsontiles
 
 hostname = "postgres"
 database = "geovisualizer"
@@ -31,4 +32,11 @@ try:
 except Exception as e:
     print(e)
 
+TIPPECANOE_DIR = '/usr/local/bin/'
 
+togeojsontiles.geojson_to_mbtiles(
+    filepaths=['./app/state.geojson'],
+    tippecanoe_dir=TIPPECANOE_DIR,
+    mbtiles_file='./app/state.mbtiles',
+    maxzoom=10
+)
