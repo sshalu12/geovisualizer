@@ -45,8 +45,6 @@ togeojsontiles.geojson_to_mbtiles(
 )
 
 service= Uploader()
-from time import sleep
-from random import randint
 mapid = "state"
 
 with open('app/state.mbtiles', 'rb') as src:
