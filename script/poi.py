@@ -1,6 +1,9 @@
 import json
 import psycopg2
 import togeojsontiles
+from mapbox import Uploader
+from time import sleep
+from random import randint
 
 hostname = 'postgres'
 database='geovisualizer'
@@ -63,3 +66,17 @@ togeojsontiles.geojson_to_mbtiles(
     maxzoom=10
 )
 
+service= Uploader()
+from time import sleep
+from random import randint
+mapid = "poi"
+
+with open('app/poi.mbtiles', 'rb') as src:
+    upload_resp = service.upload(src, mapid)
+if upload_resp.status_code == 422:
+    for i in range(5):
+        sleep(5)
+        with open('app/poi.mbtiles', 'rb') as src:
+            upload_resp = service.upload(src, mapid)
+        if upload_resp.status_code != 422:
+            break
