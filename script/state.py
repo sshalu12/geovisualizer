@@ -30,5 +30,3 @@ try:
         f.write(geo)
 except Exception as e:
     print(e)
-
-
