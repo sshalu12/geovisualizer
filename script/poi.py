@@ -62,4 +62,3 @@ togeojsontiles.geojson_to_mbtiles(
     mbtiles_file='./app/poi.mbtiles',
     maxzoom=10
 )
-
