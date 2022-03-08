@@ -67,8 +67,6 @@ togeojsontiles.geojson_to_mbtiles(
 )
 
 service= Uploader()
-from time import sleep
-from random import randint
 mapid = "poi"
 
 with open('app/poi.mbtiles', 'rb') as src:
