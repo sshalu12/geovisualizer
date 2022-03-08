@@ -10,8 +10,11 @@ services:
       - postgres
     volumes:
       - ./script:/app
+    environment:
+      - MAPBOX_ACCESS_TOKEN=sk.eyJ1Ijoic2hhbGluaTEyOTciLCJhIjoiY2wwZ2lsNnlkMTM4bDNjazZvc3VzNHc1OCJ9.LdWiqSVbOpUkWJYEp6QY2A
+      - MAPBOX_HOST=api.mapbox.com
     command: [ "./app/wait-for-postgres.sh","postgres","python", "./app/geo.py"]
-    
+
   postgres:
     build:
       context: .
