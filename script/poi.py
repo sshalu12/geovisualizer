@@ -54,6 +54,7 @@ try:
         f.write(geo)  
 except Exception as e:
     print(e)
+    quit()
 
 
 TIPPECANOE_DIR = '/usr/local/bin/'
@@ -83,3 +84,4 @@ try:
                 break
 except Exception as e:
     print(e)
+    quit()
