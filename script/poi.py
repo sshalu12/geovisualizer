@@ -1,7 +1,8 @@
 import json
+from time import sleep
+
 import psycopg2
 import togeojsontiles
-from time import sleep
 from mapbox import Uploader
 
 hostname = 'postgres'
@@ -20,6 +21,10 @@ cur=conn.cursor()
 cur.execute('SELECT * from poi ')
 query=cur.fetchall()
 conn.close()
+
+if(len(query)==0):
+    print("No data fetched from database ")
+    quit()
 
 poi=[]
 
@@ -49,13 +54,8 @@ geo = json.dumps({
     "features": poi
 })
 
-try:
-    with open('./app/poi.geojson', 'w') as f:
-        f.write(geo)  
-except Exception as e:
-    print(e)
-    quit()
-
+with open('./app/poi.geojson', 'w') as f:
+    f.write(geo)  
 
 TIPPECANOE_DIR = '/usr/local/bin/'
 
@@ -69,19 +69,17 @@ togeojsontiles.geojson_to_mbtiles(
 service= Uploader()
 mapid = "poi"
 
-try:
-    with open('app/poi.mbtiles', 'rb') as src:
-        upload_resp = service.upload(src, mapid)
+with open('app/poi.mbtiles', 'rb') as src:
+    upload_resp = service.upload(src, mapid)
+
     """ response status code 422 indicates that the server understands the content type of the request entity,
      and the syntax of the request entity is correct, but it was unable to process the contained instructions. To overcome this problem 
     script in sleep mode for 5 second and then retry"""
-    if upload_resp.status_code == 422:
-        for request in range(5):
-            sleep(5)
-            with open('app/poi.mbtiles', 'rb') as src:
-                upload_resp = service.upload(src, mapid)
-            if upload_resp.status_code != 422:
-                break
-except Exception as e:
-    print(e)
-    quit()
+
+if upload_resp.status_code == 422:
+    for request in range(5):
+        sleep(5)
+        with open('app/poi.mbtiles', 'rb') as src:
+            upload_resp = service.upload(src, mapid)
+        if upload_resp.status_code != 422:
+            break
