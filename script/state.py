@@ -1,4 +1,5 @@
 import json
+
 import psycopg2
 import togeojsontiles
 
@@ -14,6 +15,10 @@ cur.execute("SELECT id,state,country,ST_AsGeoJSON(boundary,4326)::JSONB from sta
 states_data = cur.fetchall()
 conn.close()
 
+if len(states_data)==0:
+    print("No data fetched from database ")
+    quit()
+
 states = []
 
 for row in states_data:
@@ -26,11 +31,8 @@ for row in states_data:
 
 geo = json.dumps({"type": "FeatureCollection", "features": states})
 
-try:
-    with open("./app/state.geojson", "w") as f:
-        f.write(geo)
-except Exception as e:
-    print(e)
+with open("./app/state.geojson", "w") as f:
+    f.write(geo)
 
 TIPPECANOE_DIR = '/usr/local/bin/'
 
