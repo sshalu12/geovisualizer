@@ -17,4 +17,3 @@ RUN make install
 WORKDIR /
 RUN rm -rf /tmp/tippecanoe-src \
   && apt-get -y remove --purge build-essential && apt-get -y autoremove
-  

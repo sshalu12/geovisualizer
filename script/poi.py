@@ -1,5 +1,7 @@
 import json
 import psycopg2
+import togeojsontiles
+
 hostname = 'postgres'
 database='geovisualizer'
 username='postgres'
@@ -50,3 +52,13 @@ try:
         f.write(geo)  
 except Exception as e:
     print(e)
+
+
+TIPPECANOE_DIR = '/usr/local/bin/'
+
+togeojsontiles.geojson_to_mbtiles(
+    filepaths=['./app/poi.geojson'],
+    tippecanoe_dir=TIPPECANOE_DIR,
+    mbtiles_file='./app/poi.mbtiles',
+    maxzoom=10
+)
