@@ -2,11 +2,8 @@ FROM python:3.6
 COPY requirements.txt /
 RUN pip install -r /requirements.txt
 RUN apt update
-RUN apt install -y postgresql 
-
-RUN apt-get update \
-  && apt-get -y upgrade \
-  && apt-get -y install git build-essential libsqlite3-dev zlib1g-dev
+RUN apt -y upgrade \
+  && apt -y install git build-essential libsqlite3-dev zlib1g-dev postgresql
 
 # Create a directory and copy in all files
 RUN mkdir -p /tmp/tippecanoe-src
