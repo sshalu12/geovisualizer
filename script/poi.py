@@ -1,4 +1,5 @@
 import json
+import logging
 from time import sleep
 
 import psycopg2
@@ -18,17 +19,17 @@ conn= psycopg2.connect(
     )
 
 cur=conn.cursor()
-cur.execute('SELECT * from poi ')
-query=cur.fetchall()
+cur.execute('SELECT * from poi')
+poi_data=cur.fetchall()
 conn.close()
 
-if(len(query)==0):
-    print("No data fetched from database ")
+if not poi_data :
+    logging.ERROR("No data fetched from database ")
     quit()
 
 poi=[]
 
-for data in query:   
+for data in poi_data:   
     feature = {
         "type":"Feature",
         "properties": {
@@ -66,15 +67,17 @@ togeojsontiles.geojson_to_mbtiles(
     maxzoom=10
 )
 
-service= Uploader()
+service = Uploader()
 mapid = "poi"
 
 with open('app/poi.mbtiles', 'rb') as src:
     upload_resp = service.upload(src, mapid)
 
-    """ response status code 422 indicates that the server understands the content type of the request entity,
-     and the syntax of the request entity is correct, but it was unable to process the contained instructions. To overcome this problem 
-    script in sleep mode for 5 second and then retry"""
+    """ 
+    response status code 422 indicates that the server understands the content type of the request entity,
+    and the syntax of the request entity is correct, but it was unable to process the contained instructions.
+    To overcome this problem script in sleep mode for 5 second and then retry
+    """
 
 if upload_resp.status_code == 422:
     for request in range(5):
