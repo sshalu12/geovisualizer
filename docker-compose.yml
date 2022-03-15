@@ -11,6 +11,7 @@ services:
     volumes:
       - ./script:/app
     command: [ "./app/wait-for-postgres.sh","postgres","python", "./app/geo.py"]
+    
   postgres:
     build:
       context: .
