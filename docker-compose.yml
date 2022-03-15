@@ -14,7 +14,7 @@ services:
       - MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
       - MAPBOX_HOST=api.mapbox.com
     command: [ "./app/wait-for-postgres.sh","postgres","python", "./app/geo.py"]
-
+    
   postgres:
     build:
       context: .

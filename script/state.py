@@ -18,7 +18,7 @@ cur.execute("SELECT id,state,country,ST_AsGeoJSON(boundary,4326)::JSONB from sta
 states_data = cur.fetchall()
 conn.close()
 
-if len(states_data)==0:
+if not states_data :
     logging.error("No data fetched from database ")
     quit()
 
