@@ -17,7 +17,7 @@ states_data = cur.fetchall()
 conn.close()
 
 if not states_data :
-    logging.ERROR("No data fetched from database ")
+    logging.error("No data fetched from database ")
     quit()
 
 states = []
