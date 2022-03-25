@@ -9,5 +9,6 @@ UI-based tool to allow any user to visualize polygon or point-based POI data on 
 4. Create a new .env file and add MAPBOX_ACCESS_TOKEN there
 5. `make run`
 # React App:
-1. install node 16.14.2 (includes npm 8.5.0)
-2. Run 'npm start' 
+1. Install node 16 (includes npm 8)
+2. Run `npm install`
+3. Run `npm start`
