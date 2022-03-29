@@ -1,16 +1,18 @@
-import React from 'react';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import State from "./state";
+import Poi from "./poi";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-       
-        <p>
-         Hello world!
-        </p>
+    <BrowserRouter>
+      <Routes>
+      <Route exact path="/" element={<Poi />} />
+        <Route exact path="/poi" element={<Poi />} />
+        <Route exact path="/state" element={<State />} />
         
-      </header>
-    </div>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
