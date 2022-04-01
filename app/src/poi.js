@@ -8,7 +8,6 @@ export default function Poi() {
   const mapContainer = useRef(null);
   const map = useRef(null);
   useEffect(() => {
-    if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/light-v10",
@@ -33,10 +32,10 @@ export default function Poi() {
       });
     });
   });
-  
+
   return (
     <div>
-    <Header />
+      <Header />
       <div ref={mapContainer} className="map-container" />
     </div>
   );

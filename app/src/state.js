@@ -6,7 +6,6 @@ export default function State() {
   const mapContainer = useRef(null);
   const map = useRef(null);
   useEffect(() => {
-    if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/light-v10",
@@ -19,22 +18,22 @@ export default function State() {
         url: "mapbox://shalini1297.state",
       });
       map.current.addLayer({
-        id: "state",
-        type: "line",
+        id: "states",
+        type: "fill",
         source: "state",
         "source-layer": "state",
 
         paint: {
-          "line-color": "#DA70D6",
-          "line-width": 1,
+          "fill-color": "rgba(200, 100, 240, 0.4)",
+          "fill-outline-color": "rgba(0,0,0, 1)",
         },
       });
     });
   });
- 
+
   return (
     <div>
-     <Header />
+      <Header />
       <div ref={mapContainer} className="map-container" />
     </div>
   );
