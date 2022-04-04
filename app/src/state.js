@@ -28,6 +28,10 @@ export default function State() {
           "fill-outline-color": "rgba(0,0,0, 1)",
         },
       });
+
+      map.current.addControl(
+        new mapboxgl.NavigationControl({ showCompass: false })
+      );
     });
   });
 
