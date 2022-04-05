@@ -49,6 +49,9 @@ export default function State() {
         popup.remove();
       });
 
+      map.current.addControl(
+        new mapboxgl.NavigationControl({ showCompass: false })
+      );
     });
   });
 

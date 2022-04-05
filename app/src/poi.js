@@ -67,6 +67,9 @@ export default function Poi() {
         popup.remove();
       });
 
+      map.current.addControl(
+        new mapboxgl.NavigationControl({ showCompass: false })
+      );
     });
   });
 
