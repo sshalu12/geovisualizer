@@ -30,6 +30,10 @@ export default function Poi() {
           "circle-radius": 5,
         },
       });
+
+      map.current.addControl(
+        new mapboxgl.NavigationControl({ showCompass: false })
+      );
     });
   });
 
