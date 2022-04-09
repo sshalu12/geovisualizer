@@ -40,10 +40,10 @@ export default function Poi() {
         map.current.getCanvas().style.cursor = "pointer";
         // Copy coordinates array.
         const coordinates = e.features[0].geometry.coordinates.slice();
-        const address_data = e.features[0].properties;
-        const name = address_data["business_name"];
-        const address = `${address_data["address"]} , ${address_data["city"]} , ${address_data["state"]} , ${address_data["zip"]} , ${address_data["country"]}`;
-        const category = `${address_data["category_name"]} (${address_data["category_id"]})}`;
+        const locationData = e.features[0].properties;
+        const name = locationData.business_name;
+        const address = `${locationData.address}, ${locationData.city}, ${locationData.state}, ${locationData.zip}, ${locationData.country}`;
+        const category = `${locationData.category_name} (${locationData.category_id})`;
         popup
           .setLngLat(coordinates)
           .setHTML("<p>" + name + "<br>" + address + "<br>" + category + "</p>")
