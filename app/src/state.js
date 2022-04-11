@@ -29,6 +29,26 @@ export default function State() {
         },
       });
 
+      const popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+      });
+
+      map.current.on("mousemove", "states", (e) => {
+       // Change the cursor to a pointer when the mouse is move over the states layer.
+        map.current.getCanvas().style.cursor = "pointer";
+
+        popup
+          .setLngLat(e.lngLat)
+          .setHTML(e.features[0].properties.state)
+          .addTo(map.current);
+      });
+
+      map.current.on("mouseleave", "states", () => {
+        map.current.getCanvas().style.cursor = "";
+        popup.remove();
+      });
+
       map.current.addControl(
         new mapboxgl.NavigationControl({ showCompass: false })
       );
