@@ -31,6 +31,30 @@ export default function Poi() {
         },
       });
 
+      const popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+      });
+      map.current.on("mousemove", "points-of-interest", (e) => {
+        // Change the cursor to a pointer when the mouse is move over the points-of-interest layer.
+        map.current.getCanvas().style.cursor = "pointer";
+        // Copy coordinates array.
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const locationData = e.features[0].properties;
+        const name = locationData.business_name;
+        const address = `${locationData.address}, ${locationData.city}, ${locationData.state}, ${locationData.zip}, ${locationData.country}`;
+        const category = `${locationData.category_name} (${locationData.category_id})`;
+        popup
+          .setLngLat(coordinates)
+          .setHTML("<p>" + name + "<br>" + address + "<br>" + category + "</p>")
+          .addTo(map.current);
+      });
+
+      map.current.on("mouseleave", "points-of-interest", () => {
+        map.current.getCanvas().style.cursor = "";
+        popup.remove();
+      });
+
       map.current.addControl(
         new mapboxgl.NavigationControl({ showCompass: false })
       );
