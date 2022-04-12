@@ -4,7 +4,7 @@ import Header from "./Header";
 
 mapboxgl.accessToken =
   "pk.eyJ1Ijoic2hhbGluaTEyOTciLCJhIjoiY2t6M3c2enhyMGFyNjJwcGRnZzFiZXBmbyJ9.tTTMkQttQI7SWT8D0ljMjw";
-export default function Poi() {
+export default function Location() {
   const mapContainer = useRef(null);
   const map = useRef(null);
   useEffect(() => {
@@ -63,7 +63,7 @@ export default function Poi() {
 
   return (
     <div>
-      <Header />
+      <Header name="location" />
       <div ref={mapContainer} className="map-container" />
     </div>
   );
