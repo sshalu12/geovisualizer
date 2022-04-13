@@ -35,7 +35,7 @@ export default function State() {
       });
 
       map.current.on("mousemove", "states", (e) => {
-       // Change the cursor to a pointer when the mouse is move over the states layer.
+        // Change the cursor to a pointer when the mouse is move over the states layer.
         map.current.getCanvas().style.cursor = "pointer";
 
         popup
@@ -57,7 +57,7 @@ export default function State() {
 
   return (
     <div>
-      <Header />
+      <Header name="state" />
       <div ref={mapContainer} className="map-container" />
     </div>
   );
