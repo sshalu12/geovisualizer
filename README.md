@@ -12,3 +12,6 @@ UI-based tool to allow any user to visualize polygon or point-based POI data on 
 1. Install node 16 (includes npm 8)
 2. Run `npm install`
 3. Run `npm start`
+
+# Flask Server
+1. Flask Server is in `flask_server` directory.
