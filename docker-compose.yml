@@ -1,6 +1,7 @@
 version: "2.4"
 
 services:
+
   python:
     build:
       context: .
@@ -8,12 +9,18 @@ services:
     restart: on-failure
     depends_on:
       - postgres
+    ports:
+      - "1000:4000"
     volumes:
       - ./script:/app
     environment:
       - MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
       - MAPBOX_HOST=api.mapbox.com
-    command: [ "./app/wait-for-postgres.sh","postgres","python", "./app/poi.py"]
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=geovisualizer
+      - POSTGRES_PASSWORD=
+      - POSTGRES_USER=postgres
+    command: [ "./app/wait-for-postgres.sh","postgres","python", "./app/api.py"]
   
   postgres:
     build:
