@@ -11,4 +11,4 @@ run-state:
 	@docker compose run python ./app/wait-for-postgres.sh postgres python ./app/state.py
 
 run-api:
-	@docker compose up python
+	@docker compose up web

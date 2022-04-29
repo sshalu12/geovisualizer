@@ -1,14 +1,14 @@
 import json
 import logging
 from time import sleep
-
+import os
 import psycopg2
 import togeojsontiles
 from mapbox import Uploader
 
-hostname = 'postgres'
-database='geovisualizer'
-username='postgres'
+hostname = os.getenv('POSTGRES_HOST')
+database=os.getenv('POSTGRES_DB')
+username=os.getenv('POSTGRES_USER')
 
 port_id=5432
 conn= psycopg2.connect(

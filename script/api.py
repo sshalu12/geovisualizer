@@ -24,28 +24,29 @@ cur = conn.cursor()
 def login():
 
     email = request.json.get('email')
-    passwrd = request.json.get('password')
+    password = request.json.get('password')
     cur.execute("SELECT * FROM users WHERE email='{}' ".format(email))
-    user_email = cur.fetchall()
-    if len(user_email) > 0:
+    user_email = cur.fetchone()
+    
+    if user_email :
         cur.execute(
-            "SELECT * FROM users WHERE email='{}' AND password=crypt('{}',password)".format(email, passwrd))
-        user = cur.fetchall()
-
-        if len(user) > 0:
+            "SELECT * FROM users WHERE email='{}' AND password=crypt('{}',password)".format(email, password))
+        user = cur.fetchone()
+        if user:
             print(user)
-            id = user[0][0]
+            id = user[0]
             if 'user_id' in session:
-                return jsonify({"username": user[0][1]})
+                return jsonify({"username": user[1]})
             else:
 
                 session['user_id'] = id
-                return jsonify({"username": user[0][1]})
+                return jsonify({"username": user[1]})
         else:
-            return jsonify({"status": 401, "message": "The password that you've entered is incorrect. "})
+            return jsonify({"message": "The password that you've entered is incorrect. "}),401
 
     else:
-        return jsonify({"status": 401, "message": "E-mail address does not exist."})
+        return jsonify({"message": "E-mail address does not exist."}),401
+
 
 
 @app.route('/logout', methods=['POST'])
@@ -60,3 +61,4 @@ def logout():
 if __name__ == "__main__":
     app.secret_key = 'necessaryforsession'
     app.run(debug=True, port=4000, host='0.0.0.0')
+    conn.close()
