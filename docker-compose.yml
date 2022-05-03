@@ -50,5 +50,9 @@ services:
       - ./sql:/opt/sql
       - ./docker/postgres:/opt/refresh
       - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: geovisualizer
+      POSTGRES_PASSWORD: 
+      POSTGRES_USER: postgres
 volumes:
   postgres-data:
