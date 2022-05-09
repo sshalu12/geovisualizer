@@ -7,33 +7,33 @@ import togeojsontiles
 from mapbox import Uploader
 
 hostname = os.getenv('POSTGRES_HOST')
-database=os.getenv('POSTGRES_DB')
-username=os.getenv('POSTGRES_USER')
+database = os.getenv('POSTGRES_DB')
+username = os.getenv('POSTGRES_USER')
+port_id = os.getenv('POSTGRES_PORT')
 
-port_id=5432
-conn= psycopg2.connect(
-        host=hostname,
-        dbname=database,
-        user=username,
-        port=port_id
-    )
+conn = psycopg2.connect(
+    host=hostname,
+    dbname=database,
+    user=username,
+    port=port_id
+)
 
-cur=conn.cursor()
+cur = conn.cursor()
 cur.execute('SELECT * from poi')
-poi_data=cur.fetchall()
+poi_data = cur.fetchall()
 conn.close()
 
-if not poi_data :
+if not poi_data:
     logging.error('No data fetched from database ')
     quit()
 
-poi=[]
+poi = []
 
-for data in poi_data:   
+for data in poi_data:
     feature = {
-        "type":"Feature",
+        "type": "Feature",
         "properties": {
-            "id":data[0],
+            "id": data[0],
             "business_name": data[1],
             "address": data[2],
             "city": data[3],
@@ -43,9 +43,9 @@ for data in poi_data:
             "category_name": data[9],
             "category_id": data[10]
         },
-        "geometry":{
-            "type":"Point",
-            "coordinates":[data[7],data[6]]
+        "geometry": {
+            "type": "Point",
+            "coordinates": [data[7], data[6]]
         }
     }
     poi.append(feature)
@@ -56,7 +56,7 @@ geo = json.dumps({
 })
 
 with open('./app/poi.geojson', 'w') as f:
-    f.write(geo)  
+    f.write(geo)
 
 TIPPECANOE_DIR = '/usr/local/bin/'
 

@@ -9,8 +9,8 @@ from mapbox import Uploader
 hostname = os.getenv('POSTGRES_HOST')
 database = os.getenv('POSTGRES_DB')
 username = os.getenv('POSTGRES_USER')
+port_id = os.getenv('POSTGRES_PORT')
 
-port_id = 5432
 conn = psycopg2.connect(host=hostname, dbname=database,
                         user=username, port=port_id)
 cur = conn.cursor()

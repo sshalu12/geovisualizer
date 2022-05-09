@@ -8,8 +8,8 @@ app = Flask(__name__)
 hostname = os.getenv('POSTGRES_HOST')
 database = os.getenv('POSTGRES_DB')
 username = os.getenv('POSTGRES_USER')
+port_id = os.getenv('POSTGRES_PORT')
 
-port_id = 5432
 conn = psycopg2.connect(
     host=hostname,
     dbname=database,
@@ -18,6 +18,7 @@ conn = psycopg2.connect(
 )
 
 cur = conn.cursor()
+
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -34,19 +35,19 @@ def signup():
         }
     """
 
-    username=request.json.get('username')
+    username = request.json.get('username')
     email = request.json.get('email')
     password = request.json.get('password')
     cur.execute("SELECT email FROM users WHERE email='{}'".format(email))
-    user_with_email=cur.fetchone()
+    user_with_email = cur.fetchone()
 
-    if user_with_email :
-        return jsonify({"Message": "User already exist"}),400
-        
-    cur.execute("INSERT INTO users (name,email,password) VALUES ('{}','{}',crypt('{}',gen_salt('bf')))".format(username,email,password))
+    if user_with_email:
+        return jsonify({"message": "User already exist"}), 400
+
+    cur.execute("INSERT INTO users (name,email,password) VALUES ('{}','{}',crypt('{}',gen_salt('bf')))".format(
+        username, email, password))
     conn.commit()
-    return jsonify({"Message": "User Registered Successfully"})
-        
+    return jsonify({"message": "User Registered Successfully"})
 
 
 @app.route('/login', methods=['POST'])
@@ -64,23 +65,24 @@ def login():
     """
     email = request.json.get('email')
     password = request.json.get('password')
-    cur.execute("SELECT * FROM users WHERE email='{}' AND password=crypt('{}',password)".format(email, password))
+    cur.execute(
+        "SELECT * FROM users WHERE email='{}' AND password=crypt('{}',password)".format(email, password))
     user = cur.fetchone()
 
     if not user:
-        return jsonify({"Message": "Either email or password is incorrect"}),401
-    
-    id,username=user[0],user[1]
+        return jsonify({"message": "Email and/or password is incorrect"}), 401
 
-    if not 'user_id' in session: 
-        session['user_id'] = id
+    user_id, username = user[0], user[1]
+
+    if not 'user_id' in session:
+        session['user_id'] = user_id
         return jsonify({"Username": username})
-    
-    if not session['user_id']==id:
-        return jsonify({"Message":"Bad Request"}),400
+
+    if not session['user_id'] == id:
+        return jsonify({"message": "Bad Request"}), 400
 
     return jsonify({"username": username})
-  
+
 
 @app.route('/logout', methods=['POST'])
 def logout():
@@ -93,10 +95,10 @@ def logout():
         }
     """
     if not 'user_id' in session:
-        return jsonify({"Message": "Bad Request."}),400
-    
+        return jsonify({"message": "Bad Request."}), 400
+
     session.pop('user_id', None)
-    return jsonify({"Message": "Logged Out Successfully."})
+    return jsonify({"message": "Logged Out Successfully."})
 
 
 if __name__ == "__main__":
