@@ -1,6 +1,7 @@
 import os
 
 import psycopg2
+from email_validator import validate_email
 from flask import Flask, jsonify, request, session
 
 app = Flask(__name__)
@@ -12,7 +13,7 @@ port_id = os.getenv("POSTGRES_PORT")
 
 conn = psycopg2.connect(
     host=hostname, dbname=database, user=postgres_user, port=port_id
-)    
+)
 
 cur = conn.cursor()
 
@@ -35,6 +36,24 @@ def signup():
     username = request.json.get("username")
     email = request.json.get("email")
     password = request.json.get("password")
+
+    if not (username and email and password):
+        return (
+            jsonify({"message": "either username or email or password is missing"}),
+            400,
+        )
+
+    try:
+        validate_email(email)
+    except:
+        return jsonify({"message": "email is not in correct format"}), 400
+
+    if not (type(username) == str):
+        return jsonify({"message": "username is not in correct format"}), 400
+
+    if not (type(password) == str):
+        return jsonify({"message": "password is not in correct format"}), 400
+
     cur.execute("SELECT email FROM users WHERE email='{}'".format(email))
     user_with_email = cur.fetchone()
 
@@ -65,6 +84,18 @@ def login():
     """
     email = request.json.get("email")
     password = request.json.get("password")
+
+    if not (email and password):
+        return jsonify({"message": "either email or password is missing"}), 400
+
+    try:
+        validate_email(email)
+    except:
+        return jsonify({"message": "email is not in correct format"}), 400
+
+    if not (type(password) == str):
+        return jsonify({"message": "password is not in correct format"}), 400
+
     cur.execute(
         "SELECT * FROM users WHERE email='{}' AND password=crypt('{}',password)".format(
             email, password
@@ -81,7 +112,7 @@ def login():
         session["user_id"] = user_id
         return jsonify({"Username": username})
 
-    if not session["user_id"] == id:
+    if not session["user_id"] == user_id:
         return jsonify({"message": "Bad Request"}), 400
 
     return jsonify({"username": username})
