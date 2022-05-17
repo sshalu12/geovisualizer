@@ -1,7 +1,7 @@
 import os
 
 import psycopg2
-from email_validator import validate_email
+from email_validator import validate_email, EmailNotValidError
 from flask import Flask, jsonify, request, session
 
 app = Flask(__name__)
@@ -37,36 +37,32 @@ def signup():
     email = request.json.get("email")
     password = request.json.get("password")
 
-    if not (username and email and password):
-        return (
-            jsonify({"message": "either username or email or password is missing"}),
-            400,
-        )
+    if not (username and type(username) == str):
+        return jsonify({"message": "please provide valid username"}), 400
 
     try:
-        validate_email(email)
-    except:
-        return jsonify({"message": "email is not in correct format"}), 400
+        if not (email and type(email) == str):
+            return jsonify({"message": "please provide valid email"}), 400
+        user_email = validate_email(email).email
+    except EmailNotValidError as error:
+        return jsonify({"message": f"{error}"}), 400
 
-    if not (type(username) == str):
-        return jsonify({"message": "username is not in correct format"}), 400
+    if not (password and type(password) == str):
+        return jsonify({"message": "please provide valid password"}), 400
 
-    if not (type(password) == str):
-        return jsonify({"message": "password is not in correct format"}), 400
-
-    cur.execute("SELECT email FROM users WHERE email='{}'".format(email))
+    cur.execute("SELECT email FROM users WHERE email='{}'".format(user_email))
     user_with_email = cur.fetchone()
 
     if user_with_email:
-        return jsonify({"message": "User already exist"}), 400
+        return jsonify({"message": "user already exist"}), 400
 
     cur.execute(
         "INSERT INTO users (name,email,password) VALUES ('{}','{}',crypt('{}',gen_salt('bf')))".format(
-            username, email, password
+            username, user_email, password
         )
     )
     conn.commit()
-    return jsonify({"message": "User Registered Successfully"})
+    return jsonify({"message": "user registered successfully"})
 
 
 @app.route("/login", methods=["POST"])
@@ -85,20 +81,19 @@ def login():
     email = request.json.get("email")
     password = request.json.get("password")
 
-    if not (email and password):
-        return jsonify({"message": "either email or password is missing"}), 400
-
     try:
-        validate_email(email)
-    except:
-        return jsonify({"message": "email is not in correct format"}), 400
+        if not (email and type(email) == str):
+            return jsonify({"message": "please provide valid email"}), 400
+        user_email = validate_email(email).email
+    except EmailNotValidError as error:
+        return jsonify({"message": f"{error}"}), 400
 
-    if not (type(password) == str):
-        return jsonify({"message": "password is not in correct format"}), 400
+    if not (password and type(password) == str):
+        return jsonify({"message": "please provide valid password"}), 400
 
     cur.execute(
         "SELECT * FROM users WHERE email='{}' AND password=crypt('{}',password)".format(
-            email, password
+            user_email, password
         )
     )
     user = cur.fetchone()
@@ -132,7 +127,7 @@ def logout():
         return jsonify({"message": "Bad Request."}), 400
 
     session.pop("user_id", None)
-    return jsonify({"message": "Logged Out Successfully."})
+    return jsonify({"message": "logged out successfully."})
 
 
 if __name__ == "__main__":
