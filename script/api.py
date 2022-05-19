@@ -1,8 +1,9 @@
 import os
 
 import psycopg2
-from email_validator import validate_email, EmailNotValidError
+from email_validator import EmailNotValidError, validate_email
 from flask import Flask, jsonify, request, session
+from psycopg2.errors import UniqueViolation
 
 app = Flask(__name__)
 
@@ -16,6 +17,7 @@ conn = psycopg2.connect(
 )
 
 cur = conn.cursor()
+conn.autocommit = True
 
 
 @app.route("/signup", methods=["POST"])
@@ -50,19 +52,15 @@ def signup():
     if not (password and type(password) == str):
         return jsonify({"message": "please provide valid password"}), 400
 
-    cur.execute("SELECT email FROM users WHERE email='{}'".format(user_email))
-    user_with_email = cur.fetchone()
-
-    if user_with_email:
-        return jsonify({"message": "user already exist"}), 400
-
-    cur.execute(
-        "INSERT INTO users (name,email,password) VALUES ('{}','{}',crypt('{}',gen_salt('bf')))".format(
-            username, user_email, password
+    try:
+        cur.execute(
+            "INSERT INTO users (name,email,password) VALUES ('{}','{}',crypt('{}',gen_salt('bf')))".format(
+                username, user_email, password
+            )
         )
-    )
-    conn.commit()
-    return jsonify({"message": "user registered successfully"})
+        return jsonify({"message": "user registered successfully"})
+    except UniqueViolation:
+        return jsonify({"message": "user already exist"}), 400
 
 
 @app.route("/login", methods=["POST"])
