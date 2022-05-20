@@ -3,9 +3,11 @@ import os
 import psycopg2
 from email_validator import EmailNotValidError, validate_email
 from flask import Flask, jsonify, request, session
+from flask_cors import CORS
 from psycopg2.errors import UniqueViolation
 
 app = Flask(__name__)
+CORS(app)
 
 hostname = os.getenv("POSTGRES_HOST")
 database = os.getenv("POSTGRES_DB")
