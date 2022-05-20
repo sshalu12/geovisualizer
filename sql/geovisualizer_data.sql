@@ -1,3 +1,7 @@
+---USERS Table Data 
+INSERT INTO users (name,email,password) VALUES ('shalini','shalini@gmail.com', crypt('1234', gen_salt('bf')));
+INSERT INTO users (name,email,password) VALUES ('shalu','shalu@gmail.com', crypt('12345', gen_salt('bf')));
+
 --- POI Table Data
 INSERT INTO poi (business_name, address, city, state, zip, latitude, longitude, country, category_name, category_id) VALUES ('Amazing Medical Services PC', '11016 Sutphin BLVD', 'JAMAICA', 'NY', '11435', 40.689469, -73.796664, 'US', 'Physicians & Surgeons Information Bureau', '809901');
 INSERT INTO poi (business_name, address, city, state, zip, latitude, longitude, country, category_name, category_id) VALUES ('Physical Therapy Doctor', '21273 26th AVE', 'BAYSIDE', 'NY', '11360', 40.778638, -73.776521, 'US', 'Physical Therapists', '804918');

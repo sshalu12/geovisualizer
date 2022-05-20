@@ -14,4 +14,5 @@ UI-based tool to allow any user to visualize polygon or point-based POI data on 
 3. Run `npm start`
 
 # Flask Server
-1. Flask Server is in `flask_server` directory.
+1. To Run the flask server run command `make run-api` in another terminal.
+2. Server will be accessible at this url http://localhost:1000/ 
