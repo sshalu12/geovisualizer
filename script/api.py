@@ -105,12 +105,12 @@ def login():
 
     if session.get("user_id") is None:
         session["user_id"] = user_id
-        return jsonify({"Username": username})
+        return jsonify({"Username": username,"token":"test123"})
 
     if not session["user_id"] == user_id:
         return jsonify({"message": "Bad Request"}), 400
 
-    return jsonify({"username": username})
+    return jsonify({"username": username,"token":"test123"})
 
 
 @app.route("/logout", methods=["POST"])

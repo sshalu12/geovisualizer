@@ -10,13 +10,7 @@ async function loginUser(credentials) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(credentials),
-  }).then((Response) => {
-    if (Response.status === 200) {
-      window.location.href = "/locations";
-    } else {
-      return Response.json();
-    }
-  });
+  }).then((response) => response.json());
 }
 
 function Login() {
@@ -35,8 +29,13 @@ function Login() {
         password,
       });
 
-      setresponse_message(response["message"]);
-      console.log(response_message);
+      if (response["token"]) {
+        window.open("/locations", "_self");
+        const token = response["token"];
+        sessionStorage.setItem("token", JSON.stringify(token));
+      } else {
+        setresponse_message(response["message"]);
+      }
     }
   };
   const handleValidation = (event) => {
