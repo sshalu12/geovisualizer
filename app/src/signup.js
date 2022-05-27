@@ -17,11 +17,10 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [response_message, setresponse_message] = useState("");
-
-  const [passwordError, setpasswordError] = useState("");
-  const [emailError, setemailError] = useState("");
-  const [usernameError, setusernameError] = useState("");
+  const [responsMessage, setResponseMessage] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,8 +31,7 @@ function Signup() {
         email,
         password,
       });
-      console.log(response);
-      setresponse_message(response["message"]);
+      setResponseMessage(response.message);
     }
   };
 
@@ -42,28 +40,30 @@ function Signup() {
 
     if (!username.match(/^[a-zA-Z]{5,22}$/)) {
       formIsValid = false;
-      setusernameError("Invalid username");
+      setUsernameError("Invalid username");
       return false;
     } else {
-      setusernameError("");
+      setUsernameError("");
       formIsValid = true;
     }
 
     if (!email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
       formIsValid = false;
-      setemailError("Email Not Valid");
+      setEmailError("Email Not Valid");
       return false;
     } else {
-      setemailError("");
+      setEmailError("");
       formIsValid = true;
     }
 
     if (!password.match(/^[a-zA-Z]{5,22}$/)) {
       formIsValid = false;
-      setpasswordError("Invalid password");
+      setPasswordError(
+        "Your password should be 5 to 22 characters long and contain only alpha character"
+      );
       return false;
     } else {
-      setpasswordError("");
+      setPasswordError("");
       formIsValid = true;
     }
 
@@ -80,7 +80,7 @@ function Signup() {
                 <h2>Signup</h2>
                 <div>
                   <div>
-                    <p className="response ">{response_message}</p>
+                    <p className="response ">{responsMessage}</p>
                   </div>
                 </div>
                 <label>Username</label>

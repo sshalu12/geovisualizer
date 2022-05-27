@@ -1,11 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 
 function useAuth() {
-  if (sessionStorage.getItem("token")) {
-    return true;
-  } else {
-    return false;
-  }
+  return !!sessionStorage.getItem("token")
 }
 
 const ProtectedRoutes = () => {

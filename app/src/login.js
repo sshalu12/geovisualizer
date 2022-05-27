@@ -16,9 +16,9 @@ async function loginUser(credentials) {
 function Login() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [response_message, setresponse_message] = useState("");
-  const [passwordError, setpasswordError] = useState("");
-  const [emailError, setemailError] = useState("");
+  const [responseMessage, setResponseMessage] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,10 +31,10 @@ function Login() {
 
       if (response["token"]) {
         window.open("/locations", "_self");
-        const token = response["token"];
-        sessionStorage.setItem("token", JSON.stringify(token));
+        const token = response.token;
+        sessionStorage.setItem("token", token);
       } else {
-        setresponse_message(response["message"]);
+        setResponseMessage(response.message);
       }
     }
   };
@@ -43,19 +43,21 @@ function Login() {
 
     if (!email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
       formIsValid = false;
-      setemailError("Email Not Valid");
+      setEmailError("Email Not Valid");
       return false;
     } else {
-      setemailError("");
+      setEmailError("");
       formIsValid = true;
     }
 
     if (!password.match(/^\w{5,22}$/)) {
       formIsValid = false;
-      setpasswordError("Invalid password");
+      setPasswordError(
+        "Your password should be 5 to 22 characters long and contain only alpha character"
+      );
       return false;
     } else {
-      setpasswordError("");
+      setPasswordError("");
       formIsValid = true;
     }
 
@@ -71,7 +73,7 @@ function Login() {
               <div className="form-group">
                 <h2>Login</h2>
                 <div>
-                  <p className="small ">{response_message}</p>
+                  <p className="small ">{responseMessage}</p>
                 </div>
 
                 <label>Email address</label>

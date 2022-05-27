@@ -4,18 +4,20 @@ import Location from "./poi";
 import Login from "./login";
 import Signup from "./signup";
 import ProtectedRoutes from "./ProtectedRoute";
+import Logout from "./logout";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/signup" element={<Signup />} />
+        <Route exact path="/signup" element={<Signup />} />
         <Route exact path="/" element={<Login />} />
-
         <Route exact path="/login" element={<Login />} />
+
         <Route element={<ProtectedRoutes />}>
           <Route exact path="/locations" element={<Location />} />
           <Route exact path="/state" element={<State />} />
+          <Route exact path="/logout" element={<Logout />} />
         </Route>
       </Routes>
     </BrowserRouter>
