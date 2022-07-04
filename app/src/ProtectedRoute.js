@@ -1,11 +1,23 @@
 import { Navigate, Outlet } from "react-router-dom";
+import React, { useState } from "react";
 
-function useAuth() {
-  return !!sessionStorage.getItem("token")
-}
-
+const response = function IsloggedIn() {
+  return fetch("http://localhost:1000/IsloggedIn", {
+    method: "POST",
+    credentials: "include",
+  });
+};
 const ProtectedRoutes = () => {
-  const isAuth = useAuth();
+  const [ans, setAns] = useState("false");
+  const Protectedd = async () => {
+    const useAuth = response().then(function (response) {
+      return response.ok;
+    });
+    const isAuth = await useAuth;
+    setAns(isAuth);
+  };
+  Protectedd();
+  const isAuth = ans;
   return isAuth ? <Outlet /> : <Navigate to="/" />;
 };
 

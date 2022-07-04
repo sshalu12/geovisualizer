@@ -2,12 +2,12 @@ import os
 
 import psycopg2
 from email_validator import EmailNotValidError, validate_email
-from flask import Flask, jsonify, request, session
+from flask import Flask, jsonify, redirect, request, session
 from flask_cors import CORS
 from psycopg2.errors import UniqueViolation
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True, expose_headers="Set-Cookie")
 
 hostname = os.getenv("POSTGRES_HOST")
 database = os.getenv("POSTGRES_DB")
@@ -20,6 +20,13 @@ conn = psycopg2.connect(
 
 cur = conn.cursor()
 conn.autocommit = True
+
+
+@app.route("/IsloggedIn", methods=["POST"])
+def IsloggedIn():
+    if not session.get("user_id") is None:
+        return jsonify({"message": "user logged in"}), 200
+    return jsonify({"message": "User not logged in"}), 400
 
 
 @app.route("/signup", methods=["POST"])

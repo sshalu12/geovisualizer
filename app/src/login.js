@@ -5,7 +5,7 @@ import "./login.css";
 async function loginUser(credentials) {
   return fetch("http://localhost:1000/login", {
     method: "POST",
-
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -28,7 +28,7 @@ function Login() {
         email,
         password,
       });
-
+      console.log(response);
       if (response["token"]) {
         window.open("/locations", "_self");
         const token = response.token;
