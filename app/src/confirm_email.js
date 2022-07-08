@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./login.css";
+import { useParams } from "react-router-dom";
 
-async function loginUser(credentials) {
-  return fetch("http://localhost:1000/login", {
+async function confirmEmail(credentials) {
+  return fetch("http://localhost:1000/confirm_email/<token>", {
     method: "POST",
     credentials: "include",
     headers: {
@@ -13,42 +13,30 @@ async function loginUser(credentials) {
   }).then((response) => response.json());
 }
 
-function Login() {
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
+function ConfirmEmail() {
+  const params = useParams();
+  const email_token = params["*"];
+  const [password, setpassword] = useState("");
+  const [passwordAgain, setpasswordAgain] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [emailError, setEmailError] = useState("");
+  const [passwordAgainError, setPasswordAgainError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     let formvalid = handleValidation();
     if (formvalid === true) {
-      const response = await loginUser({
-        email,
+      const response = await confirmEmail({
         password,
+        passwordAgain,
+        email_token,
       });
-
-      if (response["token"]) {
-        window.open("/locations", "_self");
-        const token = response.token;
-        sessionStorage.setItem("token", token);
-      } else {
-        setResponseMessage(response.message);
-      }
+      console.log(response);
+      setResponseMessage(response.message);
     }
   };
   const handleValidation = (event) => {
     let formIsValid = true;
-
-    if (!email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
-      formIsValid = false;
-      setEmailError("Email Not Valid");
-      return false;
-    } else {
-      setEmailError("");
-      formIsValid = true;
-    }
 
     if (!password.match(/^\w{5,22}$/)) {
       formIsValid = false;
@@ -58,6 +46,16 @@ function Login() {
       return false;
     } else {
       setPasswordError("");
+      formIsValid = true;
+    }
+    if (!passwordAgain.match(/^\w{5,22}$/)) {
+      formIsValid = false;
+      setPasswordError(
+        "Your password should be 5 to 22 characters long and contain only alpha character"
+      );
+      return false;
+    } else {
+      setPasswordAgainError("");
       formIsValid = true;
     }
 
@@ -71,42 +69,48 @@ function Login() {
           <div className="col-md-4">
             <form id="loginform" onSubmit={handleSubmit}>
               <div className="form-group">
-                <h2>Login</h2>
+                <h2>Reset Password</h2>
                 <div>
                   <p className="small ">{responseMessage}</p>
                 </div>
 
-                <label>Email address</label>
+                <label>New Password</label>
 
-                <input
-                  type="email"
-                  className="form-control"
-                  placeholder="Enter email"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <small className="text-danger form-text">{emailError}</small>
-              </div>
-              <br></br>
-              <div className="form-group">
-                <label>Password</label>
                 <input
                   type="password"
                   className="form-control"
-                  placeholder="Password"
-                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter Password"
+                  onChange={(e) => setpassword(e.target.value)}
                 />
                 <small className="text-danger form-text">{passwordError}</small>
               </div>
               <br></br>
+              <div className="form-group">
+                <label>New Password again</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="Enter Password again"
+                  onChange={(e) => setpasswordAgain(e.target.value)}
+                />
+                <small className="text-danger form-text">
+                  {passwordAgainError}
+                </small>
+              </div>
+              <br></br>
+
               <button type="submit" className="btn btn-primary">
-                Submit
+                Reset Password
               </button>
-              <p>
-                <br></br> <a href="forgotpassword">Forgot Password?</a>
-              </p>
-              <p>
-                Don't have an account? <a href="signup">Sign up</a>
-              </p>
+
+              <div>
+                <p style={{ "text-align": "center" }}>
+                  <br></br>
+                  <h4>
+                    <a href="/login">Login</a>
+                  </h4>
+                </p>
+              </div>
             </form>
           </div>
         </div>
@@ -115,4 +119,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default ConfirmEmail;

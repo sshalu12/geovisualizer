@@ -5,7 +5,6 @@ async function logoutUser() {
     method: "POST",
     credentials: "include",
   }).then((response) => {
-    console.log(response);
     if (response.status === 200) {
       window.open("/login", "_self");
     } else {
