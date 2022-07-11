@@ -5,7 +5,7 @@ import "./login.css";
 async function loginUser(credentials) {
   return fetch("http://localhost:1000/login", {
     method: "POST",
-
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -101,9 +101,11 @@ function Login() {
               <button type="submit" className="btn btn-primary">
                 Submit
               </button>
-
               <p>
-                <br></br>Don't have an account? <a href="signup">Sign up</a>
+                <br></br> <a href="forgotpassword">Forgot Password?</a>
+              </p>
+              <p>
+                Don't have an account? <a href="signup">Sign up</a>
               </p>
             </form>
           </div>
