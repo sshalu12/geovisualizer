@@ -171,6 +171,43 @@ def forgot_password():
     return jsonify({"message": "Email sent successfully."})
 
 
+@app.route("/confirm_email/<token>", methods=["POST"])
+def confirm_email(token):
+    """RESET PASSWORD API
+    Parameters:
+    token (String): token
+    password (String): Password of user
+    password (String): Password of user
+
+    Returns:
+        Http Response: {
+            String : It can be either Message or username
+            Integer : Status Code
+        }
+    """
+    password = request.json.get("password")
+    passwordAgain = request.json.get("passwordAgain")
+    email_token = request.json.get("email_token")
+    try:
+        if not password == passwordAgain:
+
+            return jsonify({"messge": "Both password is not same."})
+
+        email = s.loads(email_token)
+        cur.execute(
+            "UPDATE users SET password = crypt('{}',password) WHERE email ='{}'".format(
+                password, email
+            )
+        )
+        return jsonify({"message": "Password updated successfully", "email": email})
+    except:
+        return jsonify(
+            {
+                "message": "It looks like you clicked on an invalid password reset link. Please try again."
+            }
+        )
+
+
 @app.route("/logout", methods=["POST"])
 def logout():
     """LOGOUT API
