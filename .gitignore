@@ -3,6 +3,7 @@
 *.mbtiles
 *.geojson
 .env
+script/config.cfg
 
 # dependencies
 app/node_modules

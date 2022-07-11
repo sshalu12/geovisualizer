@@ -16,6 +16,11 @@ const Header = (props) => {
       >
         state
       </a>
+      <div className="right menu">
+        <a href="logout" className="ui item">
+          Logout
+        </a>
+      </div>
     </div>
   );
 };

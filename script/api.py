@@ -1,11 +1,26 @@
+from crypt import methods
+
 import os
 
 import psycopg2
 from email_validator import EmailNotValidError, validate_email
-from flask import Flask, jsonify, request, session
+from flask import Flask, jsonify, request, session, url_for
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeSerializer
+from flask_cors import CORS
 from psycopg2.errors import UniqueViolation
 
 app = Flask(__name__)
+
+app.config.from_pyfile("config.cfg")
+CORS(
+    app,
+    supports_credentials=True,
+    expose_headers="Set-Cookie",
+)
+mail = Mail(app)
+s = URLSafeSerializer("Thisissecret!")
+
 
 hostname = os.getenv("POSTGRES_HOST")
 database = os.getenv("POSTGRES_DB")
@@ -18,6 +33,13 @@ conn = psycopg2.connect(
 
 cur = conn.cursor()
 conn.autocommit = True
+
+
+@app.route("/IsloggedIn", methods=["POST"])
+def IsloggedIn():
+    if not session.get("user_id") is None:
+        return jsonify({"message": "user logged in"}), 200
+    return jsonify({"message": "User not logged in"}), 400
 
 
 @app.route("/signup", methods=["POST"])
@@ -103,12 +125,50 @@ def login():
 
     if session.get("user_id") is None:
         session["user_id"] = user_id
-        return jsonify({"Username": username})
+        return jsonify({"username": username, "token": "test123"})
 
     if not session["user_id"] == user_id:
         return jsonify({"message": "Bad Request"}), 400
 
-    return jsonify({"username": username})
+    return jsonify({"username": username, "token": "test123"})
+
+
+@app.route("/forgot_password", methods=["POST"])
+def forgot_password():
+    """FORGOT PASSWORD API
+    Parameters:
+    email (String): Email of user
+
+    Returns:
+        Http Response: {
+            String : It can be either Message or username
+            Integer : Status Code
+        }
+    """
+    email = request.json.get("email")
+    cur.execute("SELECT * FROM users WHERE email='{}'".format(email))
+    user = cur.fetchone()
+    if not user:
+        return jsonify({"message": "User doesn't exist."})
+    token = s.dumps(email)
+
+    link = url_for(
+        "confirm_email",
+        token=token,
+        _external=False,
+    )
+    msg = Message(
+        "GeoVisualier Password Reset",
+        sender="shalinisharma1297@gmail.com",
+        recipients=[email],
+    )
+    msg.body = "Hello,\nPlease reset your password using this: http://localhost:3000{}\nThanks".format(
+        link
+    )
+
+    mail.send(msg)
+
+    return jsonify({"message": "Email sent successfully."})
 
 
 @app.route("/logout", methods=["POST"])
