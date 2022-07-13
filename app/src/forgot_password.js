@@ -31,7 +31,7 @@ function ForgotPassword() {
   const handleValidation = (event) => {
     let formIsValid = true;
 
-    if (!email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
+    if (!email.match(/[a-z0-9._%+-]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
       formIsValid = false;
       setEmailError("Email Not Valid");
       return false;

@@ -15,12 +15,12 @@ async function confirmEmail(credentials) {
 
 function ConfirmEmail() {
   const params = useParams();
-  const email_token = params["*"];
+  const emailToken = params["*"];
   const [password, setpassword] = useState("");
-  const [passwordAgain, setpasswordAgain] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [passwordAgainError, setPasswordAgainError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,8 +28,8 @@ function ConfirmEmail() {
     if (formvalid === true) {
       const response = await confirmEmail({
         password,
-        passwordAgain,
-        email_token,
+        confirmPassword,
+        emailToken,
       });
       console.log(response);
       setResponseMessage(response.message);
@@ -48,14 +48,14 @@ function ConfirmEmail() {
       setPasswordError("");
       formIsValid = true;
     }
-    if (!passwordAgain.match(/^\w{5,22}$/)) {
+    if (!confirmPassword.match(/^\w{5,22}$/)) {
       formIsValid = false;
       setPasswordError(
         "Your password should be 5 to 22 characters long and contain only alpha character"
       );
       return false;
     } else {
-      setPasswordAgainError("");
+      setConfirmPasswordError("");
       formIsValid = true;
     }
 
@@ -91,10 +91,10 @@ function ConfirmEmail() {
                   type="password"
                   className="form-control"
                   placeholder="Enter Password again"
-                  onChange={(e) => setpasswordAgain(e.target.value)}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 <small className="text-danger form-text">
-                  {passwordAgainError}
+                  {confirmPasswordError}
                 </small>
               </div>
               <br></br>

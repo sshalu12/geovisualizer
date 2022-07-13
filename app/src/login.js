@@ -29,10 +29,8 @@ function Login() {
         password,
       });
 
-      if (response["token"]) {
+      if (response["username"]) {
         window.open("/locations", "_self");
-        const token = response.token;
-        sessionStorage.setItem("token", token);
       } else {
         setResponseMessage(response.message);
       }
@@ -41,7 +39,7 @@ function Login() {
   const handleValidation = (event) => {
     let formIsValid = true;
 
-    if (!email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
+    if (!email.match(/[a-z0-9._%+-]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
       formIsValid = false;
       setEmailError("Email Not Valid");
       return false;

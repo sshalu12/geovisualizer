@@ -40,14 +40,17 @@ function Signup() {
 
     if (!username.match(/^[a-zA-Z]{5,22}$/)) {
       formIsValid = false;
-      setUsernameError("Invalid username");
+      setUsernameError(
+        "Invalid username, must be between 5-22 characters long and contain only alpha characters."
+      );
       return false;
     } else {
       setUsernameError("");
       formIsValid = true;
     }
 
-    if (!email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
+    if (!email.match(/[a-z0-9._%+-]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
+      // if (!email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
       formIsValid = false;
       setEmailError("Email Not Valid");
       return false;

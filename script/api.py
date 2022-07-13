@@ -35,11 +35,11 @@ cur = conn.cursor()
 conn.autocommit = True
 
 
-@app.route("/IsloggedIn", methods=["POST"])
-def IsloggedIn():
+@app.route("/is_logged_in", methods=["POST"])
+def is_logged_in():
     if not session.get("user_id") is None:
         return jsonify({"message": "user logged in"}), 200
-    return jsonify({"message": "User not logged in"}), 400
+    return jsonify({"message": "user not logged in"}), 401
 
 
 @app.route("/signup", methods=["POST"])
@@ -125,12 +125,12 @@ def login():
 
     if session.get("user_id") is None:
         session["user_id"] = user_id
-        return jsonify({"username": username, "token": "test123"})
+        return jsonify({"username": username})
 
     if not session["user_id"] == user_id:
         return jsonify({"message": "Bad Request"}), 400
 
-    return jsonify({"username": username, "token": "test123"})
+    return jsonify({"username": username})
 
 
 @app.route("/forgot_password", methods=["POST"])
@@ -174,10 +174,10 @@ def forgot_password():
 @app.route("/confirm_email/<token>", methods=["POST"])
 def confirm_email(token):
     """RESET PASSWORD API
-    Parameters:
+    Request Body:
     token (String): token
     password (String): Password of user
-    password (String): Password of user
+    passwordPassword (String): Password of user
 
     Returns:
         Http Response: {
@@ -186,11 +186,10 @@ def confirm_email(token):
         }
     """
     password = request.json.get("password")
-    passwordAgain = request.json.get("passwordAgain")
-    email_token = request.json.get("email_token")
+    confirm_password = request.json.get("confirmPassword")
+    email_token = request.json.get("emailToken")
     try:
-        if not password == passwordAgain:
-
+        if not password == confirm_password:
             return jsonify({"messge": "Both password is not same."})
 
         email = s.loads(email_token)
