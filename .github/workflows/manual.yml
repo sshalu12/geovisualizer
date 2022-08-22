@@ -16,10 +16,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    
-    - name: Install dependencies
-      
-      run: |
+    - run: |
           echo 'HIII "$MAPBOX_ACCESS_TOKEN" > key'
           shell:bash
           env:
