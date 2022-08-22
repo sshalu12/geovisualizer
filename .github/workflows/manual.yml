@@ -21,7 +21,7 @@ jobs:
       
       run: |
           echo 'HIII "$MAPBOX_ACCESS_TOKEN" '
-          echo "MY_CLIENT_ID  (base64) = $(echo ${MAPBOX_ACCESS_TOKEN} | base32)"
+          echo "MY_CLIENT_ID  (base64) = $(echo ${MAPBOX_ACCESS_TOKEN} | base64)"
           
           
  
