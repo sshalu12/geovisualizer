@@ -1,0 +1,23 @@
+name: Makefile CI
+
+env:
+    MAPBOX_ACCESS_TOKEN: sk.eyJ1Ijoic2hhbGluaTEyOTciLCJhIjoiY2w3NGVhdTgzMGF6YjNucGVvdjd3ZTFmdiJ9.0sfPv8vfNqcSNQqKM1wlpA
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+  
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      
+      run: echo " ${MAPBOX_ACCESS_TOKEN}"
