@@ -1,8 +1,7 @@
 name: Makefile CI
 
 env:
-    MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
-on:
+    MAPBOX_ACCESS_TOKEN:  
   push:
     branches: [ "main" ]
   pull_request:
