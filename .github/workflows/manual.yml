@@ -19,4 +19,4 @@ jobs:
     
     - name: Install dependencies
       
-      run: echo " ${MAPBOX_ACCESS_TOKEN}"
+      run: echo "Hii  ${MAPBOX_ACCESS_TOKEN}"
