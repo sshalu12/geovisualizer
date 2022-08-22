@@ -1,6 +1,7 @@
 name: Makefile CI
 
-
+env:
+    MAPBOX_ACCESS_TOKEN: sk.eyJ1Ijoic2hhbGluaTEyOTciLCJhIjoiY2w3NGVhdTgzMGF6YjNucGVvdjd3ZTFmdiJ9.0sfPv8vfNqcSNQqKM1wlpA
 
 on:
   push:
@@ -10,6 +11,7 @@ on:
 
 jobs:
   build:
+  
 
     runs-on: ubuntu-latest
 
@@ -19,8 +21,6 @@ jobs:
       
     - name: Install dependencies
       
-      env:
-            MAPBOX_ACCESS_TOKEN: ${{ env.MAPBOX_ACCESS_TOKEN }}
       run: make run-poi
       
     - name: Run check
