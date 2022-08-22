@@ -1,7 +1,7 @@
 name: Makefile CI
 
 env:
-    MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+    MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOEN }}
 on:
   push:
     branches: [ "main" ]
@@ -19,4 +19,6 @@ jobs:
     
     - name: Install dependencies
       
-      run: echo "Hii  ${MAPBOX_ACCESS_TOKEN}"
+      run: |
+          echo $MAPBOX_ACCESS_TOKEN | base64 --decode > cert.der
+ 
