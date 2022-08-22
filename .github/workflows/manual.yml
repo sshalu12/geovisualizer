@@ -20,5 +20,5 @@ jobs:
     - name: Install dependencies
       
       run: |
-          echo $MAPBOX_ACCESS_TOKEN | base64 --decode > cert.der
+          echo "HIII ${MAPBOX_ACCESS_TOKEN}"
  
