@@ -15,12 +15,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    
-      
-    - name: Install dependencies
-      
-      run: make run-poi
       
     - name: Run check
-      run: make run-state
-      
+      run: make run-poi
